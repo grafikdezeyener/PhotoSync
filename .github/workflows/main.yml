@@ -7,6 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Unzip project
+        run: unzip -o PhotoSync.zip
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -15,8 +17,9 @@ jobs:
         with:
           gradle-version: "8.9"
       - name: Build
+        working-directory: PhotoSync
         run: gradle assembleDebug --no-daemon
       - uses: actions/upload-artifact@v4
         with:
           name: PhotoSync-apk
-          path: app/build/outputs/apk/debug/*.apk
+          path: PhotoSync/app/build/outputs/apk/debug/*.apk
