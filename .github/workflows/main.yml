@@ -2,6 +2,8 @@ name: Build APK
 on:
   push:
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,7 +21,9 @@ jobs:
       - name: Build
         working-directory: PhotoSync
         run: gradle assembleDebug --no-daemon
-      - uses: actions/upload-artifact@v4
+      - name: Rename APK
+        run: cp PhotoSync/app/build/outputs/apk/debug/app-debug.apk AndroidPhotoSync.apk
+      - uses: softprops/action-gh-release@v2
         with:
-          name: PhotoSync-apk
-          path: PhotoSync/app/build/outputs/apk/debug/*.apk
+          tag_name: latest
+          files: AndroidPhotoSync.apk
